@@ -29,6 +29,9 @@ jobs:
             cli
             types
             utils
+            deps
+            docs
+            repo
           types: |
             breaking
             feat

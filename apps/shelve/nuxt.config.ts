@@ -5,8 +5,8 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-01-24',
 
-  future: {
-    compatibilityVersion: 4,
+  hub: {
+    db: 'postgresql',
   },
 
   ssr: false,
@@ -28,6 +28,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     private: {
       resendApiKey: '',
+      resendWebhookSecret: '',
       encryptionKey: '',
       adminEmails: '',
       senderEmail: '',
@@ -78,5 +79,5 @@ export default defineNuxtConfig({
     format: ['webp', 'jpeg', 'jpg', 'png', 'svg']
   },
 
-  modules: ['@nuxt/ui', 'nuxt-auth-utils']
+  modules: ['@nuxt/ui', 'nuxt-auth-utils', '@nuxthub/core', 'botid/nuxt'],
 })

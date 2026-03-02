@@ -7,25 +7,16 @@ export default defineNuxtConfig({
     '/': { prerender: true }
   },
 
-  modules: ['@nuxt/ui', '@nuxt/scripts'],
+  modules: ['@nuxt/ui', '@nuxt/scripts', '@nuxtjs/mdc', '@nuxthub/core'],
+
+  hub: {
+    kv: true,
+  },
 
   runtimeConfig: {
     private: {
-      redis: {
-        url: '',
-      },
       encryptionKey: '',
     },
-  },
-
-  $development: {
-    nitro: {
-      storage: {
-        vault: {
-          driver: 'memory'
-        }
-      }
-    }
   },
 
   devtools: { enabled: true },

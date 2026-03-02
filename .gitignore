@@ -142,3 +142,6 @@ dist
 */dist/
 */.output/
 .data
+
+apps/vault/.data
+apps/shelve/.data

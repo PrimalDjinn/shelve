@@ -5,31 +5,49 @@
   "type": "module",
   "repository": "https://github.com/HugoRCD/shelve",
   "scripts": {
-    "dev": "turbo dev --filter=@shelve/app --filter=@shelve/lp",
-    "build": "turbo build",
-    "lint": "turbo lint",
-    "lint:fix": "turbo lint:fix",
-    "typecheck": "turbo typecheck",
-    "release": "turbo release && changeset",
-    "build:app": "turbo build --filter=@shelve/app",
-    "build:lp": "turbo build --filter=@shelve/lp",
-    "build:vault": "turbo build --filter=@shelve/vault",
-    "build:cli": "turbo build --filter=@shelve/cli",
-    "dev:app": "turbo dev --filter=@shelve/app",
-    "dev:lp": "turbo dev --filter=@shelve/lp",
-    "dev:vault": "turbo dev --filter=@shelve/vault",
-    "dev:cli": "turbo dev --filter=@shelve/cli"
+    "dev": "turbo run dev --filter=@shelve/{app,lp}",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "typecheck": "turbo run typecheck",
+    "release": "turbo run release && changeset",
+    "build:app": "turbo run build --filter=@shelve/app",
+    "build:lp": "turbo run build --filter=@shelve/lp",
+    "build:vault": "turbo run build --filter=@shelve/vault",
+    "build:cli": "turbo run build --filter=@shelve/cli",
+    "dev:app": "turbo run dev --filter=@shelve/app",
+    "dev:lp": "turbo run dev --filter=@shelve/lp",
+    "dev:vault": "turbo run dev --filter=@shelve/vault",
+    "dev:cli": "turbo run dev --filter=@shelve/cli",
+    "cli": "pnpm build:cli && node packages/cli/dist/index.mjs"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
+    "@changesets/cli": "^2.29.8",
     "@hrcd/eslint-config": "^3.0.3",
     "@shelve/cli": "workspace:*",
-    "automd": "^0.4.2",
-    "eslint": "^9.38.0",
-    "turbo": "^2.5.8",
+    "automd": "^0.4.3",
+    "eslint": "^9.39.3",
+    "turbo": "^2.8.10",
     "typescript": "^5.9.3"
   },
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:rolldown-vite@latest"
+    },
+    "onlyBuiltDependencies": [
+      "sharp"
+    ],
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "vue-demi"
+    ]
+  },
   "packageManager": "pnpm@10.18.3",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "engines": {
     "node": ">=24"
   }

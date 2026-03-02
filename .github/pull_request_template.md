@@ -21,11 +21,14 @@ Here are the available types and scopes:
 ### Scopes
 - apps (all applications)
 - app (the main application)
-- lp (the landing page and documentation)
+- lp (the landing page or documentation)
 - base (the base layer)
 - cli (the command line interface)
 - types (the type definitions)
 - utils (the utility functions)
+- deps (the dependencies)
+- docs (the documentation)
+- repo (the repository)
 -->
 
 ### 🔗 Linked issue

@@ -1,12 +1,14 @@
 import { z } from 'zod'
-import { idParamsSchema } from '~~/server/database/zod'
+import { TeamRole } from '@types'
+import { idParamsSchema } from '~~/server/db/zod'
 
 const updateEnvironmentSchema = z.object({
   name: z.string().min(3).max(50),
 })
 
 export default defineEventHandler(async (event) => {
-  const team = useCurrentTeam(event)
+  const slug = await getTeamSlugFromEvent(event)
+  const { team } = await requireUserTeam(event, slug, { minRole: TeamRole.ADMIN })
 
   const { id } = await getValidatedRouterParams(event, idParamsSchema.parse)
   const { name } = await readValidatedBody(event, updateEnvironmentSchema.parse)

@@ -1,5 +1,5 @@
 import { defineCollection, defineContentConfig, z } from '@nuxt/content'
-import { asSeoCollection } from '@nuxtjs/seo/content'
+import { defineDocusCollections } from 'docus/collections'
 
 const buttonSchema = z.object({
   label: z.string(),
@@ -55,52 +55,30 @@ const pageHeroSchema = z.object({
 
 export default defineContentConfig({
   collections: {
-    docs: defineCollection(
-      asSeoCollection({
-        type: 'page',
-        source: 'docs/**/*',
-        schema: z.object({
-          navigation: z.object({
-            title: z.string().optional(),
-          }),
-          links: z.array(z.object({
-            label: z.string(),
-            icon: z.string(),
-            avatar: z.object({
-              src: z.string(),
-              alt: z.string()
-            }).optional(),
-            to: z.string(),
-            target: z.string().optional()
-          }))
-        })
+    ...defineDocusCollections({ basePath: '/docs', contentDir: 'docs', landing: false }),
+    blog: defineCollection({
+      type: 'page',
+      source: 'blog/**/*.md',
+      schema: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        date: z.string(),
+        minRead: z.number(),
+        image: z.string(),
+        tags: z.array(z.string()),
+        word: z.string(),
+        authors: z.array(z.object({
+          name: z.string(),
+          description: z.string(),
+          to: z.string(),
+          target: z.string(),
+          avatar: z.object({
+            src: z.string(),
+            alt: z.string()
+          }).optional()
+        })),
       })
-    ),
-    blog: defineCollection(
-      asSeoCollection({
-        type: 'page',
-        source: 'blog/**/*.md',
-        schema: z.object({
-          title: z.string().nonempty(),
-          description: z.string().nonempty(),
-          date: z.string(),
-          minRead: z.number(),
-          image: z.string(),
-          tags: z.array(z.string()),
-          word: z.string(),
-          authors: z.array(z.object({
-            name: z.string(),
-            description: z.string(),
-            to: z.string(),
-            target: z.string(),
-            avatar: z.object({
-              src: z.string(),
-              alt: z.string()
-            }).optional()
-          })),
-        })
-      })
-    ),
+    }),
     blogPage: defineCollection({
       type: 'data',
       source: 'blog.yml',
@@ -226,17 +204,15 @@ export default defineContentConfig({
         })
       })
     }),
-    legal: defineCollection(
-      asSeoCollection({
-        type: 'page',
-        source: 'legal/**/*.md',
-        schema: z.object({
-          title: z.string().nonempty(),
-          description: z.string().nonempty(),
-          lastUpdated: z.string(),
-          effectiveDate: z.string()
-        })
+    legal: defineCollection({
+      type: 'page',
+      source: 'legal/**/*.md',
+      schema: z.object({
+        title: z.string().nonempty(),
+        description: z.string().nonempty(),
+        lastUpdated: z.string(),
+        effectiveDate: z.string()
       })
-    )
+    })
   }
 })

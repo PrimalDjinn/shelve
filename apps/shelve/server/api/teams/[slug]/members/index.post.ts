@@ -3,15 +3,14 @@ import { TeamRole } from '@types'
 
 const createMemberSchema = z.object({
   email: z.string({
-    required_error: 'Missing new member email',
+    error: 'Missing new member email',
   }).email().trim(),
-  role: z.nativeEnum(TeamRole).default(TeamRole.MEMBER)
+  role: z.enum(TeamRole).default(TeamRole.MEMBER)
 })
 
 export default eventHandler(async (event) => {
-  const team = useCurrentTeam(event)
-  const member = useCurrentMember(event)
-  validateTeamRole(member, TeamRole.ADMIN)
+  const slug = await getTeamSlugFromEvent(event)
+  const { team, member } = await requireUserTeam(event, slug, { minRole: TeamRole.ADMIN })
 
   const { email, role } = await readValidatedBody(event, createMemberSchema.parse)
 

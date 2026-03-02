@@ -6,13 +6,18 @@
         "^build"
       ],
       "outputs": [
-        "dist/**",
+        ".vercel/output/**",
         ".output/**",
         ".nuxt/**"
       ],
       "env": [
+        "AI_GATEWAY_API_KEY",
         "DATABASE_URL",
+        "KV_URL",
+        "KV_REST_API_TOKEN",
+        "KV_REST_API_URL",
         "NUXT_SESSION_PASSWORD",
+        "NUXT_PUBLIC_PAYLOAD_ID",
         "NUXT_PRIVATE_ENCRYPTION_KEY",
         "NUXT_OAUTH_GITHUB_CLIENT_ID",
         "NUXT_OAUTH_GITHUB_CLIENT_SECRET",
@@ -42,21 +47,19 @@
       "persistent": true
     },
     "dev:prepare": {
-      "cache": false,
-      "outputs": [
-        "dist/**",
-        ".output/**",
-        ".nuxt/**"
-      ]
+      "cache": false
+    },
+    "transit": {
+      "dependsOn": ["^transit"]
     },
     "lint": {
-      "cache": true
+      "dependsOn": ["transit"]
     },
     "lint:fix": {},
     "test": {},
     "release": {},
     "typecheck": {
-      "cache": true
+      "dependsOn": ["transit"]
     }
   }
 }

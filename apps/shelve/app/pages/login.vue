@@ -3,7 +3,7 @@ import { motion } from 'motion-v'
 
 const { title } = useAppConfig()
 
-const {data} = useFetch("/api/features")
+const { data } = useFetch('/api/features')
 
 definePageMeta({
   layout: 'auth',
@@ -15,6 +15,7 @@ const showOtp = ref(false)
 const focus = ref(false)
 const email = ref(route.query.email as string || '')
 const prefilledOtp = ref(route.query.otp as string || '')
+const redirectUrl = computed(() => route.query.redirect as string || '')
 const authMode = ref<'oauth' | 'email'>('oauth')
 
 if (email.value && prefilledOtp.value) {
@@ -111,11 +112,11 @@ useSeoMeta({
             :exit="{ opacity: 0, y: -20 }"
             :transition="{ duration: 0.3 }"
           >
-            <AuthButton v-if="data?.isGithubEnabled" icon="simple-icons:github" label="Sign in with GitHub" provider="github" />
-            <AuthButton v-if="data?.isGoogleEnabled" icon="simple-icons:google" label="Sign in with Google" provider="google" />
-
-            <motion.div
-              v-if="data?.isEmailEnabled && (data?.isGithubEnabled || data?.isGoogleEnabled)"
+            <AuthButton v-if="isGithubEnabled" icon="simple-icons:github" label="Sign in with GitHub" provider="github" :redirect-url />
+            <AuthButton v-if="isGoogleEnabled" icon="simple-icons:google" label="Sign in with Google" provider="google" :redirect-url />
+            
+            <motion.div 
+              v-if="isEmailEnabled && (isGithubEnabled || isGoogleEnabled)" 
               class="flex items-center gap-3 my-2"
               :initial="{ opacity: 0, scaleX: 0 }"
               :animate="{ opacity: 1, scaleX: 1 }"
@@ -175,6 +176,7 @@ useSeoMeta({
               <AuthOtpForm
                 :email
                 :prefilled-otp
+                :redirect-url
                 @back-to-email="handleBackToEmail"
                 @otp-verified="handleOtpVerified"
               />
