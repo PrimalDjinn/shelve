@@ -1,0 +1,40 @@
+{
+  "name": "@primaldinn/unemail",
+  "version": "0.0.0",
+  "description": "A universal email provider client library",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "lint": "eslint .",
+    "build": "pnpm rolldown -c",
+    "prepack": "pnpm run build",
+    "release": "pnpm changeset publish",
+    "ci": "pnpm install --frozen-lockfile && pnpm build"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/PrimalDjinn/shelve#readme",
+  "bugs": {
+    "url": "https://github.com/PrimalDjinn/shelve/issues"
+  },
+  "keywords": [
+    "unemail",
+    "email",
+    "postal",
+    "mailchimp",
+    "@primaldinn/unemail"
+  ],
+  "author": "AllanBosire",
+  "packageManager": "pnpm@10.30.3",
+  "dependencies": {
+    "@mailchimp/mailchimp_transactional": "^1.4.1",
+    "@sendgrid/mail": "^8.1.6",
+    "ofetch": "1.5.1",
+    "std-env": "^4.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/mailchimp__mailchimp_transactional": "^1.0.11",
+    "eslint": "^9.39.3",
+    "rolldown": "1.0.0-rc.13",
+    "rolldown-plugin-dts": "^0.23.2"
+  }
+}

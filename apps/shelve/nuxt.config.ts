@@ -1,65 +1,65 @@
-import vue from '@vitejs/plugin-vue'
+import vue from "@vitejs/plugin-vue";
 
 export default defineNuxtConfig({
-  extends: '../base',
+  extends: "../base",
 
-  compatibilityDate: '2025-01-24',
+  compatibilityDate: "2025-01-24",
 
   hub: {
-    db: 'postgresql',
+    db: "sqlite",
   },
 
   ssr: false,
 
   nitro: {
     experimental: {
-      openAPI: true
+      openAPI: true,
     },
     rollupConfig: {
-      plugins: [vue()]
+      plugins: [vue() as any],
     },
     imports: {
-      dirs: ['./server/services']
-    }
+      dirs: ["./server/services"],
+    },
   },
 
-  css: ['~/assets/css/index.css'],
+  css: ["~/assets/css/index.css"],
 
   runtimeConfig: {
     private: {
-      resendApiKey: '',
-      resendWebhookSecret: '',
-      encryptionKey: '',
-      adminEmails: '',
-      senderEmail: '',
-      allowedOrigins: '',
+      /** @deprecated */
+      resendApiKey: "",
+      /** @deprecated */
+      resendWebhookSecret: "",
+      /** @deprecated */
+      senderEmail: "",
+      encryptionKey: "",
+      adminEmails: "",
+      allowedOrigins: "",
       github: {
-        privateKey: '',
+        privateKey: "",
       },
-      smtp: {
-        host: '',
-        port: '',
-        user: '',
-        pass: '',
-      },
+    },
+    email: {
+      provider: "",
     },
     oauth: {
       google: {
-        clientId: '',
-        clientSecret: '',
+        clientId: "",
+        clientSecret: "",
       },
       github: {
-        clientId: '',
-        clientSecret: '',
+        clientId: "",
+        clientSecret: "",
       },
-    }
+    },
   },
 
   $development: {
     runtimeConfig: {
       public: {
         github: {
-          appName: 'shelve-local',
+          appName: "shelve-local",
         },
       },
     },
@@ -69,15 +69,15 @@ export default defineNuxtConfig({
     runtimeConfig: {
       public: {
         github: {
-          appName: 'shelve-cloud',
+          appName: "shelve-cloud",
         },
       },
     },
   },
 
   image: {
-    format: ['webp', 'jpeg', 'jpg', 'png', 'svg']
+    format: ["webp", "jpeg", "jpg", "png", "svg"],
   },
 
-  modules: ['@nuxt/ui', 'nuxt-auth-utils', '@nuxthub/core', 'botid/nuxt'],
-})
+  modules: ["@nuxt/ui", "nuxt-auth-utils", "@nuxthub/core", "botid/nuxt"],
+});

@@ -1,34 +1,25 @@
-import { CreateEmailOptions, Resend } from 'resend'
-import nodemailer from 'nodemailer'
-import { render } from '@vue-email/render'
-import type { H3Event } from 'h3'
-import welcomeEmail from '~~/server/emails/welcomeEmail.vue'
-import verifyOtp from '~~/server/emails/verifyOtp.vue'
-import teamInvitation from '~~/server/emails/teamInvitation.vue'
+import { CreateEmailOptions, Resend } from "resend";
+import { render } from "@vue-email/render";
+import type { H3Event } from "h3";
+import welcomeEmail from "~~/server/emails/welcomeEmail.vue";
+import verifyOtp from "~~/server/emails/verifyOtp.vue";
+import teamInvitation from "~~/server/emails/teamInvitation.vue";
+import { type EmailProvider, getEmailProvider } from "@primaldinn/unemail";
 
 export class EmailService {
-
-  private readonly resend: Resend | null = null
-  private readonly transporter: nodemailer.Transporter | null = null
-  private readonly SENDER: string
+  private readonly resend: Resend | null = null;
+  private readonly provider: EmailProvider | null = null;
+  private readonly SENDER: string;
 
   constructor(event: H3Event) {
-    const config = useRuntimeConfig(event)
+    const config = useRuntimeConfig(event);
     if (config.private.resendApiKey) {
-      this.resend = new Resend(config.private.resendApiKey)
-    } else if (config.private.smtp?.host) {
-      this.transporter = nodemailer.createTransport({
-        host: config.private.smtp.host,
-        port: Number(config.private.smtp.port || 587),
-        secure: Number(config.private.smtp.port) === 465,
-        auth: {
-          user: config.private.smtp.user,
-          pass: config.private.smtp.pass,
-        },
-      })
+      this.resend = new Resend(config.private.resendApiKey);
+    } else if (config.email.provider) {
+      this.provider = getEmailProvider(config.email.provider);
     }
 
-    this.SENDER = config.private.senderEmail || 'HugoRCD <contact@hrcd.fr>'
+    this.SENDER = config.private.senderEmail || "HugoRCD <contact@hrcd.fr>";
   }
 
   async sendOtp(
@@ -38,27 +29,26 @@ export class EmailService {
   ): Promise<void> {
     if (!this.resend) {
       console.warn(
-        'Resend API key not found, set NUXT_PRIVATE_RESEND_API_KEY in your environment variables to enable email sending'
-      )
-      console.log('Development mode: OTP code is', otp)
-      return
+        "Resend API key not found, set NUXT_PRIVATE_RESEND_API_KEY in your environment variables to enable email sending"
+      );
+      console.log("Development mode: OTP code is", otp);
+      return;
     }
 
-    const template = await this.generateOtpTemplate(otp, redirectUrl)
+    const template = await this.generateOtpTemplate(otp, redirectUrl);
 
     try {
       await this.sendMail({
         from: this.SENDER,
         to: [email],
-        subject: 'Your Shelve Login Code',
+        subject: "Your Shelve Login Code",
         html: template,
-      })
-        .then(() => {
-          console.log('OTP email sent')
-        })
+      }).then(() => {
+        console.log("OTP email sent");
+      });
     } catch (error) {
-      console.log('Error sending OTP email: ', error)
-      throw error
+      console.log("Error sending OTP email: ", error);
+      throw error;
     }
   }
 
@@ -69,33 +59,31 @@ export class EmailService {
   ): Promise<void> {
     if (!this.resend) {
       console.warn(
-        'Resend API key not found, set NUXT_PRIVATE_RESEND_API_KEY in your environment variables to enable email sending'
-      )
-      return
+        "Resend API key not found, set NUXT_PRIVATE_RESEND_API_KEY in your environment variables to enable email sending"
+      );
+      return;
     }
-    const template = await this.generateWelcomeTemplate(username, appUrl)
+    const template = await this.generateWelcomeTemplate(username, appUrl);
 
     try {
       await this.sendMail({
         from: this.SENDER,
         to: [email],
-        subject: 'Welcome to Shelve!',
+        subject: "Welcome to Shelve!",
         html: template,
-      })
-        .then(() => {
-          console.log('Welcome email sent')
-        })
+      }).then(() => {
+        console.log("Welcome email sent");
+      });
       await this.sendMail({
         from: this.SENDER,
-        to: ['contact@shelve.cloud'],
-        subject: 'New user registered',
+        to: ["contact@shelve.cloud"],
+        subject: "New user registered",
         html: `New user registered: ${username} - ${email}`,
-      })
-        .then(() => {
-          console.log('New user email sent')
-        })
+      }).then(() => {
+        console.log("New user email sent");
+      });
     } catch (error) {
-      console.log('Error sending welcome email: ', error)
+      console.log("Error sending welcome email: ", error);
     }
   }
 
@@ -107,10 +95,10 @@ export class EmailService {
       return await render(verifyOtp, {
         otp,
         redirectUrl,
-      })
+      });
     } catch (error) {
-      console.error(error)
-      return `<h1>OTP: ${otp}</h1>`
+      console.error(error);
+      return `<h1>OTP: ${otp}</h1>`;
     }
   }
 
@@ -121,10 +109,10 @@ export class EmailService {
     try {
       return await render(welcomeEmail, {
         name: username,
-      })
+      });
     } catch (error) {
-      console.error(error)
-      return `<h1>Welcome to Shelve, ${username}!</h1>`
+      console.error(error);
+      return `<h1>Welcome to Shelve, ${username}!</h1>`;
     }
   }
 
@@ -135,14 +123,14 @@ export class EmailService {
     role: string;
     inviteUrl: string;
   }): Promise<void> {
-    const { email, teamName, inviterName, role, inviteUrl } = options
+    const { email, teamName, inviterName, role, inviteUrl } = options;
 
     if (!this.resend) {
       console.warn(
-        'Resend API key not found, set NUXT_PRIVATE_RESEND_API_KEY in your environment variables to enable email sending'
-      )
-      console.log('Development mode: Invitation URL is', inviteUrl)
-      return
+        "Resend API key not found, set NUXT_PRIVATE_RESEND_API_KEY in your environment variables to enable email sending"
+      );
+      console.log("Development mode: Invitation URL is", inviteUrl);
+      return;
     }
 
     const template = await this.generateInvitationTemplate(
@@ -150,7 +138,7 @@ export class EmailService {
       inviterName,
       role,
       inviteUrl
-    )
+    );
 
     try {
       const payload = {
@@ -158,13 +146,13 @@ export class EmailService {
         to: [email],
         subject: `You've been invited to join ${teamName} on Shelve`,
         html: template,
-      }
-      
-      await this.sendMail(payload)
-      console.log('Invitation email sent to', email)
+      };
+
+      await this.sendMail(payload);
+      console.log("Invitation email sent to", email);
     } catch (error) {
-      console.log('Error sending invitation email: ', error)
-      throw error
+      console.log("Error sending invitation email: ", error);
+      throw error;
     }
   }
 
@@ -180,24 +168,22 @@ export class EmailService {
         inviterName,
         role,
         inviteUrl,
-      })
+      });
     } catch (error) {
-      return `<h1>You've been invited to join ${teamName} on Shelve</h1><p><a href="${inviteUrl}">Accept Invitation</a></p>`
+      return `<h1>You've been invited to join ${teamName} on Shelve</h1><p><a href="${inviteUrl}">Accept Invitation</a></p>`;
     }
   }
-
 
   private async sendMail(payload: CreateEmailOptions) {
     if (this.resend) {
-      await this.resend.emails.send(payload)
-    } else if (this.transporter) {
-      await this.transporter.sendMail(payload)
+      await this.resend.emails.send(payload);
+    } else if (this.provider) {
+      await this.provider.send(payload);
     } else {
       console.warn(
-        'No email provider configured. Set either NUXT_PRIVATE_RESEND_API_KEY or SMTP credentials.',
+        "No email provider configured. Set either NUXT_PRIVATE_RESEND_API_KEY or SMTP credentials.",
         payload
-      )
+      );
     }
   }
-
 }

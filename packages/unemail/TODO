@@ -1,0 +1,9 @@
+- [ ] support postmark
+- [ ] support listmonk
+- [ ] support mailjet
+- [ ] support mailgun
+- [ ] support mailersend
+- [ ] add mocker
+- [ ] support aws-ses
+- [ ] support http
+- [ ] support zeptomail
