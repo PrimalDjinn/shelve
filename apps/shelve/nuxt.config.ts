@@ -6,7 +6,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-01-24",
 
   hub: {
-    db: "sqlite",
+    db: {
+      dialect: 'sqlite',
+    },
   },
 
   ssr: false,

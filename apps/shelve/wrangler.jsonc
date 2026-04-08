@@ -1,0 +1,6 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "d1_databases": [{ "binding": "DB" }],
+  "kv_namespaces": [{ "binding": "KV" }, { "binding": "CACHE" }],
+  "r2_buckets": [{ "binding": "BLOB" }]
+}

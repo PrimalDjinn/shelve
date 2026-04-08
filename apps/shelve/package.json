@@ -39,6 +39,7 @@
     "@nuxt/devtools": "^3.2.4",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/libsodium-wrappers": "^0.8.2",
-    "@types/nodemailer": "^7.0.11"
+    "@types/nodemailer": "^7.0.11",
+    "wrangler": "^4.81.0"
   }
 }
